@@ -2,7 +2,7 @@
 
 Cross-language time + memory benchmark across three xlsx implementations:
 
-- **Elixir** — ExVEx (this library)
+- **Elixir** — Linen (this library)
 - **Python** — openpyxl
 - **Rust** — umya-spreadsheet
 
@@ -11,7 +11,7 @@ the methodology and four-phase rotation design.
 
 ## Running
 
-From the `ex_v_ex/` project root:
+From the `linen/` project root:
 
 ```bash
 mix bench.comparative

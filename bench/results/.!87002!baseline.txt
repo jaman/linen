@@ -1,0 +1,28 @@
+
+=== Linen benchmark \x{2014} baseline ===
+
+Operating System: macOS
+CPU Information: Apple M3 Max
+Number of Available Cores: 16
+Available memory: 48 GB
+Elixir 1.18.3
+Erlang 27.2
+JIT enabled: true
+
+Benchmark suite executing with the following configuration:
+warmup: 2 s
+time: 5 s
+memory time: 1 s
+reduction time: 0 ns
+parallel: 1
+inputs: none specified
+Estimated total run time: 24 s
+Excluding outliers: false
+
+Benchmarking 1000 unique string interns + save ...
+Benchmarking 500 get_cell ...
+Benchmarking 500 put_cell + save ...
+Calculating statistics...
+Formatting results...
+
+Name                                        ips        average  deviation         median         99th %

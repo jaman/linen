@@ -1,4 +1,4 @@
-# ExVEx Performance Benchmark Report
+# Linen Performance Benchmark Report
 
 Benchmarks captured with Benchee (5 s timed runs, 2 s warmup, 1 s memory
 measurement). Run with:
@@ -18,7 +18,7 @@ BENCH_LABEL=after BENCH_LOAD=bench/results/baseline.benchee mix run bench/put_ce
 
 Two targeted fixes land in the same commit:
 
-1. **Sheet tree cache on `%ExVEx.Workbook{}`.** The old `put_cell` /
+1. **Sheet tree cache on `%Linen.Workbook{}`.** The old `put_cell` /
    `get_cell` / `merge_cells` / `unmerge_cells` paths all parsed the full
    worksheet XML (`Saxy.SimpleForm.parse_string`) and re-emitted it
    (`Saxy.encode!`) on every call. For bulk writes this went quadratic.
@@ -26,7 +26,7 @@ Two targeted fixes land in the same commit:
    across subsequent calls; `save/2` re-serializes only dirty sheet
    trees once at flush time.
 
-2. **`ExVEx.OOXML.SharedStrings` switched from tuple to two maps**
+2. **`Linen.OOXML.SharedStrings` switched from tuple to two maps**
    (`by_index`, `by_string`). `intern/2` is now O(1) instead of O(N) per
    call (was `Tuple.insert_at` which copied the N-element tuple each
    time). `get/2` stays O(1).

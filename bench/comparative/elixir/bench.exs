@@ -24,7 +24,7 @@ defmodule Bench do
   def write_data_sheet(book, sheet_name, rows, cols) do
     Enum.reduce(1..rows, book, fn row, acc ->
       Enum.reduce(1..cols, acc, fn col, inner ->
-        {:ok, next} = ExVEx.put_cell(inner, sheet_name, {row, col}, gen_cell(row, col))
+        {:ok, next} = Linen.put_cell(inner, sheet_name, {row, col}, gen_cell(row, col))
         next
       end)
     end)
@@ -33,7 +33,7 @@ defmodule Bench do
   def clear_data_sheet(book, sheet_name, rows, cols) do
     Enum.reduce(1..rows, book, fn row, acc ->
       Enum.reduce(1..cols, acc, fn col, inner ->
-        case ExVEx.put_cell(inner, sheet_name, {row, col}, nil) do
+        case Linen.put_cell(inner, sheet_name, {row, col}, nil) do
           {:ok, next} -> next
           {:error, _} -> inner
         end
@@ -50,7 +50,7 @@ reference_sheets = Map.fetch!(spec["template"], "reference_sheets")
   :timer.tc(fn ->
     case mode do
       "create" ->
-        {:ok, book} = ExVEx.new()
+        {:ok, book} = Linen.new()
 
         all_sheets = summary_sheets ++ data_sheets ++ reference_sheets
 
@@ -62,10 +62,10 @@ reference_sheets = Map.fetch!(spec["template"], "reference_sheets")
 
             acc =
               if idx == 0 do
-                {:ok, a} = ExVEx.rename_sheet(acc, "Sheet1", name)
+                {:ok, a} = Linen.rename_sheet(acc, "Sheet1", name)
                 a
               else
-                {:ok, a} = ExVEx.add_sheet(acc, name)
+                {:ok, a} = Linen.add_sheet(acc, name)
                 a
               end
 
@@ -97,26 +97,26 @@ reference_sheets = Map.fetch!(spec["template"], "reference_sheets")
 
             acc =
               Enum.reduce(sheet["merges"] || [], acc, fn range, a ->
-                {:ok, next} = ExVEx.merge_cells(a, name, range, preserve_values: true)
+                {:ok, next} = Linen.merge_cells(a, name, range, preserve_values: true)
                 next
               end)
 
             Enum.reduce(sheet["formulas"] || [], acc, fn [cell, formula], a ->
-              {:ok, next} = ExVEx.put_cell(a, name, cell, {:formula, formula})
+              {:ok, next} = Linen.put_cell(a, name, cell, {:formula, formula})
               next
             end)
           end)
 
-        :ok = ExVEx.save(book, output)
+        :ok = Linen.save(book, output)
         {written, 0}
 
       "edit" ->
-        {:ok, book} = ExVEx.open(input)
+        {:ok, book} = Linen.open(input)
 
         data_sheet_names =
           data_sheets
           |> Enum.map(& &1["name"])
-          |> Enum.filter(&Enum.member?(ExVEx.sheet_names(book), &1))
+          |> Enum.filter(&Enum.member?(Linen.sheet_names(book), &1))
 
         rows = spec["manipulation"]["rows_per_data_sheet"]
         cols = spec["manipulation"]["cols_per_data_sheet"]
@@ -131,7 +131,7 @@ reference_sheets = Map.fetch!(spec["template"], "reference_sheets")
             {Bench.write_data_sheet(acc, name, rows, cols), n + rows * cols}
           end)
 
-        :ok = ExVEx.save(book, output)
+        :ok = Linen.save(book, output)
         {written, cleared}
     end
   end)

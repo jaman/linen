@@ -1,5 +1,5 @@
-alias ExVEx.Packaging.Zip
-alias ExVEx.Packaging.Zip.Entry
+alias Linen.Packaging.Zip
+alias Linen.Packaging.Zip.Entry
 
 prolog = ~s(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n)
 

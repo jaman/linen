@@ -9,46 +9,46 @@ save_path = Path.join(results_dir, "#{label}.benchee")
 fixture = Path.join([File.cwd!(), "test", "fixtures", "cells.xlsx"])
 
 put_cells_then_save = fn ->
-  {:ok, book} = ExVEx.open(fixture)
+  {:ok, book} = Linen.open(fixture)
 
   book =
     Enum.reduce(1..500, book, fn i, acc ->
       row = div(i - 1, 5) + 1
       col = rem(i - 1, 5) + 1
-      {:ok, next} = ExVEx.put_cell(acc, "Sheet1", {row, col}, "value-#{i}")
+      {:ok, next} = Linen.put_cell(acc, "Sheet1", {row, col}, "value-#{i}")
       next
     end)
 
   out = Path.join(System.tmp_dir!(), "bench_put_cell_#{:erlang.unique_integer([:positive])}.xlsx")
-  :ok = ExVEx.save(book, out)
+  :ok = Linen.save(book, out)
   File.rm(out)
 end
 
 read_500_cells = fn ->
-  {:ok, book} = ExVEx.open(fixture)
+  {:ok, book} = Linen.open(fixture)
 
   Enum.each(1..500, fn i ->
     row = div(i - 1, 5) + 1
     col = rem(i - 1, 5) + 1
-    {:ok, _} = ExVEx.get_cell(book, "Sheet1", {row, col})
+    {:ok, _} = Linen.get_cell(book, "Sheet1", {row, col})
   end)
 end
 
 intern_1000_unique_strings = fn ->
-  {:ok, book} = ExVEx.open(fixture)
+  {:ok, book} = Linen.open(fixture)
 
   book =
     Enum.reduce(1..1000, book, fn i, acc ->
-      {:ok, next} = ExVEx.put_cell(acc, "Sheet1", {i, 1}, "s-#{i}")
+      {:ok, next} = Linen.put_cell(acc, "Sheet1", {i, 1}, "s-#{i}")
       next
     end)
 
   out = Path.join(System.tmp_dir!(), "bench_sst_#{:erlang.unique_integer([:positive])}.xlsx")
-  :ok = ExVEx.save(book, out)
+  :ok = Linen.save(book, out)
   File.rm(out)
 end
 
-IO.puts("\n=== ExVEx benchmark — #{label} ===\n")
+IO.puts("\n=== Linen benchmark — #{label} ===\n")
 
 run_opts = [
   time: 5,

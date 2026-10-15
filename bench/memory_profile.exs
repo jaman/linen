@@ -118,7 +118,7 @@ summary_sheets = Map.fetch!(spec["template"], "summary_sheets")
 data_sheets = Map.fetch!(spec["template"], "data_sheets")
 reference_sheets = Map.fetch!(spec["template"], "reference_sheets")
 
-{:ok, book} = ExVEx.new()
+{:ok, book} = Linen.new()
 all_sheets = summary_sheets ++ data_sheets ++ reference_sheets
 
 book =
@@ -128,10 +128,10 @@ book =
     name = sheet["name"]
 
     if idx == 0 do
-      {:ok, a} = ExVEx.rename_sheet(acc, "Sheet1", name)
+      {:ok, a} = Linen.rename_sheet(acc, "Sheet1", name)
       a
     else
-      {:ok, a} = ExVEx.add_sheet(acc, name)
+      {:ok, a} = Linen.add_sheet(acc, name)
       a
     end
   end)
@@ -148,7 +148,7 @@ book =
 
     Enum.reduce(1..rows, acc, fn r, a ->
       Enum.reduce(1..cols, a, fn c, inner ->
-        {:ok, next} = ExVEx.put_cell(inner, name, {r, c}, G.gen_cell(r, c))
+        {:ok, next} = Linen.put_cell(inner, name, {r, c}, G.gen_cell(r, c))
         next
       end)
     end)
@@ -161,12 +161,12 @@ book =
 
     acc =
       Enum.reduce(sheet["merges"] || [], acc, fn range, a ->
-        {:ok, n} = ExVEx.merge_cells(a, name, range, preserve_values: true)
+        {:ok, n} = Linen.merge_cells(a, name, range, preserve_values: true)
         n
       end)
 
     Enum.reduce(sheet["formulas"] || [], acc, fn [cell, formula], a ->
-      {:ok, n} = ExVEx.put_cell(a, name, cell, {:formula, formula})
+      {:ok, n} = Linen.put_cell(a, name, cell, {:formula, formula})
       n
     end)
   end)
@@ -175,12 +175,12 @@ Profile.snapshot("After populating all 24,800 cells")
 Profile.attribute_workbook(book, "After populating all 24,800 cells")
 
 out = Path.join(System.tmp_dir!(), "memory_profile_#{:erlang.unique_integer([:positive])}.xlsx")
-:ok = ExVEx.save(book, out)
+:ok = Linen.save(book, out)
 
 Profile.snapshot("After save")
 Profile.attribute_workbook(book, "After save")
 
 File.rm(out)
-ExVEx.close(book)
+Linen.close(book)
 
 Profile.snapshot("After close + rm")

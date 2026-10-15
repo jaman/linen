@@ -3,11 +3,11 @@
  361 \x{2502}   defp fetch_sheet_xml(book, sheet) do
      \x{2502}        ~
      \x{2502}
-     \x{2514}\x{2500} lib/ex_v_ex.ex:361:8: ExVEx (module)
+     \x{2514}\x{2500} lib/linen.ex:361:8: Linen (module)
 
-Generated ex_v_ex app
+Generated linen app
 
-=== ExVEx benchmark \x{2014} after ===
+=== Linen benchmark \x{2014} after ===
 
 Operating System: macOS
 CPU Information: Apple M3 Max
@@ -66,6 +66,6 @@ Comparison:
 1000 unique string interns + save                   16.23 MB - 2.77x memory usage +10.38 MB
 500 put_cell + save (baseline)                     347.97 MB - 59.41x memory usage +342.11 MB
 1000 unique string interns + save (baseline)      1803.93 MB - 307.99x memory usage +1798.07 MB
-Suite saved in external term format at /Users/jarius/Programming/elixir/ex_v_ex/ex_v_ex/bench/results/after.benchee
+Suite saved in external term format at /Users/jarius/Programming/elixir/linen/linen/bench/results/after.benchee
 
-Snapshot saved to /Users/jarius/Programming/elixir/ex_v_ex/ex_v_ex/bench/results/after.benchee
+Snapshot saved to /Users/jarius/Programming/elixir/linen/linen/bench/results/after.benchee

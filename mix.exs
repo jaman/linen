@@ -1,12 +1,12 @@
-defmodule ExVEx.MixProject do
+defmodule Linen.MixProject do
   use Mix.Project
 
-  @version "0.2.2"
-  @source_url "https://github.com/jaman/ex_v_ex"
+  @version "0.3.0"
+  @source_url "https://github.com/jaman/linen"
 
   def project do
     [
-      app: :ex_v_ex,
+      app: :linen,
       version: @version,
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
@@ -15,7 +15,7 @@ defmodule ExVEx.MixProject do
       package: package(),
       docs: docs(),
       source_url: @source_url,
-      name: "ExVEx",
+      name: "Linen",
       elixirc_paths: elixirc_paths(Mix.env()),
       dialyzer: [plt_add_apps: [:mix]]
     ]
@@ -51,7 +51,7 @@ defmodule ExVEx.MixProject do
 
   defp docs do
     [
-      main: "ExVEx",
+      main: "Linen",
       source_ref: "v#{@version}",
       source_url: @source_url,
       extras: [

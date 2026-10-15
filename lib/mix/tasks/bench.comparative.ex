@@ -18,7 +18,7 @@ defmodule Mix.Tasks.Bench.Comparative do
   """
   use Mix.Task
 
-  alias ExVEx.Bench.Report
+  alias Linen.Bench.Report
 
   @shortdoc "Run the 4-phase cross-language xlsx benchmark"
 

@@ -1,53 +1,53 @@
-# ExVEx
+# Linen
 
-**Elixir vs. Excel.** A pure-Elixir library for reading and editing existing
+A pure-Elixir library for reading and editing existing
 `.xlsx` and `.xlsm` files with round-trip fidelity — no Rust, no Python, no
 NIFs, no second runtime in your deployment.
 
 ```elixir
 # Create from scratch
-{:ok, book} = ExVEx.new()
-{:ok, book} = ExVEx.rename_sheet(book, "Sheet1", "Summary")
-{:ok, book} = ExVEx.add_sheet(book, "Data")
-{:ok, book} = ExVEx.put_cell(book, "Data", "A1", "alpha")
-:ok = ExVEx.save(book, "new.xlsx")
+{:ok, book} = Linen.new()
+{:ok, book} = Linen.rename_sheet(book, "Sheet1", "Summary")
+{:ok, book} = Linen.add_sheet(book, "Data")
+{:ok, book} = Linen.put_cell(book, "Data", "A1", "alpha")
+:ok = Linen.save(book, "new.xlsx")
 
 # Or open an existing workbook
-{:ok, book} = ExVEx.open("inventory.xlsx")
+{:ok, book} = Linen.open("inventory.xlsx")
 
 # Read
-ExVEx.sheet_names(book)                           #=> ["Sheet1", "Sheet2"]
-ExVEx.get_cell(book, "Sheet1", "A1")              #=> {:ok, "widget"}
-ExVEx.get_cell(book, "Sheet1", "B2")              #=> {:ok, 42}
-ExVEx.get_cell(book, "Sheet1", "C3")              #=> {:ok, ~D[2024-01-15]}
-ExVEx.get_formula(book, "Sheet1", "D4")           #=> {:ok, "=SUM(B2:B10)"}
-ExVEx.get_style(book, "Sheet1", "A1")             #=> {:ok, %ExVEx.Style{...}}
+Linen.sheet_names(book)                           #=> ["Sheet1", "Sheet2"]
+Linen.get_cell(book, "Sheet1", "A1")              #=> {:ok, "widget"}
+Linen.get_cell(book, "Sheet1", "B2")              #=> {:ok, 42}
+Linen.get_cell(book, "Sheet1", "C3")              #=> {:ok, ~D[2024-01-15]}
+Linen.get_formula(book, "Sheet1", "D4")           #=> {:ok, "=SUM(B2:B10)"}
+Linen.get_style(book, "Sheet1", "A1")             #=> {:ok, %Linen.Style{...}}
 
 # Write
-{:ok, book} = ExVEx.put_cell(book, "Sheet1", "D1", "Updated")
-{:ok, book} = ExVEx.put_cell(book, "Sheet1", "D2", 3.14)
-{:ok, book} = ExVEx.put_cell(book, "Sheet1", "D3", true)
-{:ok, book} = ExVEx.put_cell(book, "Sheet1", "D4", ~D[2024-06-01])
-{:ok, book} = ExVEx.put_cell(book, "Sheet1", "D5", {:formula, "=SUM(A1:A10)"})
+{:ok, book} = Linen.put_cell(book, "Sheet1", "D1", "Updated")
+{:ok, book} = Linen.put_cell(book, "Sheet1", "D2", 3.14)
+{:ok, book} = Linen.put_cell(book, "Sheet1", "D3", true)
+{:ok, book} = Linen.put_cell(book, "Sheet1", "D4", ~D[2024-06-01])
+{:ok, book} = Linen.put_cell(book, "Sheet1", "D5", {:formula, "=SUM(A1:A10)"})
 
 # Coordinates accept both A1 refs and {row, col} integer tuples
-ExVEx.get_cell(book, "Sheet1", {2, 3})            #=> same as ExVEx.get_cell(book, "Sheet1", "C2")
-{:ok, book} = ExVEx.put_cell(book, "Sheet1", {10, 5}, "tuple write")
+Linen.get_cell(book, "Sheet1", {2, 3})            #=> same as Linen.get_cell(book, "Sheet1", "C2")
+{:ok, book} = Linen.put_cell(book, "Sheet1", {10, 5}, "tuple write")
 
 # Merge / unmerge
-{:ok, book} = ExVEx.merge_cells(book, "Sheet1", "A1:B2")
-{:ok, ["A1:B2"]} = ExVEx.merged_ranges(book, "Sheet1")
-{:ok, book} = ExVEx.unmerge_cells(book, "Sheet1", "A1:B2")
+{:ok, book} = Linen.merge_cells(book, "Sheet1", "A1:B2")
+{:ok, ["A1:B2"]} = Linen.merged_ranges(book, "Sheet1")
+{:ok, book} = Linen.unmerge_cells(book, "Sheet1", "A1:B2")
 
 # Excel tables
-{:ok, book} = ExVEx.add_table(book, "Sheet1", "A1:C10", name: "Sales")
-{:ok, %ExVEx.Table{columns: ["Region", "Qty", "Amount"]}} = ExVEx.table(book, "Sales")
-{:ok, book} = ExVEx.append_table_rows(book, "Sales", [["West", 4, 12.5]])
-{:ok, book} = ExVEx.put_table_totals_row(book, "Sales", Amount: :sum)
-{:ok, rows} = ExVEx.table_records(book, "Sales")  #=> [%{"Region" => "North", ...}, ...]
+{:ok, book} = Linen.add_table(book, "Sheet1", "A1:C10", name: "Sales")
+{:ok, %Linen.Table{columns: ["Region", "Qty", "Amount"]}} = Linen.table(book, "Sales")
+{:ok, book} = Linen.append_table_rows(book, "Sales", [["West", 4, 12.5]])
+{:ok, book} = Linen.put_table_totals_row(book, "Sales", Amount: :sum)
+{:ok, rows} = Linen.table_records(book, "Sales")  #=> [%{"Region" => "North", ...}, ...]
 
 # Save
-:ok = ExVEx.save(book, "inventory.xlsx")
+:ok = Linen.save(book, "inventory.xlsx")
 ```
 
 ## Why
@@ -57,7 +57,7 @@ but nothing that *edits existing* spreadsheets. Every team that
 needs this today reaches for Python (`openpyxl`) or a Rust NIF — which drags
 a second runtime into the deployment.
 
-ExVEx fills that gap in pure Elixir.
+Linen fills that gap in pure Elixir.
 
 ## Status
 
@@ -111,9 +111,12 @@ validated against [umya-spreadsheet](https://crates.io/crates/umya-spreadsheet)
 
 ```elixir
 def deps do
-  [{:ex_v_ex, "~> 0.2"}]
+  [{:linen, "~> 0.3"}]
 end
 ```
+
+Linen was published as `ex_v_ex` (`ExVEx`) up to 0.2.2. To move over, replace
+`{:ex_v_ex, ...}` with `{:linen, "~> 0.3"}` and `ExVEx` with `Linen` in module names.
 
 ## Design
 
@@ -122,17 +125,17 @@ Three commitments drive the design:
 1. **Lazy raw parts.** The archive is read into a flat `%{path => bytes}`
    map. Parts you never touch are written back byte-identical on save.
 2. **Immutable functional API.** Every mutating operation returns a new
-   `%ExVEx.Workbook{}`. No GenServers, no mutable references.
+   `%Linen.Workbook{}`. No GenServers, no mutable references.
 3. **Preserve over re-serialize.** When a part is mutated (a worksheet with
    a written cell; the styles.xml when a date write adds an xf; the
-   sharedStrings.xml when a new string is interned), ExVEx surgically edits
+   sharedStrings.xml when a new string is interned), Linen surgically edits
    just the changed sub-tree and leaves the surrounding XML alone —
    namespaces, unknown attributes, and extension elements survive.
 
 This is the same strategy used by [umya-spreadsheet](https://crates.io/crates/umya-spreadsheet)
 (Rust), and stronger than [edit-xlsx](https://crates.io/crates/edit-xlsx)'s
 full-deserialize-reserialize approach. It's also the only way to preserve
-`.xlsm` VBA binaries byte-for-byte, which ExVEx verifies in its test suite.
+`.xlsm` VBA binaries byte-for-byte, which Linen verifies in its test suite.
 
 ## License
 

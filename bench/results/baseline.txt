@@ -1,5 +1,5 @@
 
-=== ExVEx benchmark \x{2014} baseline ===
+=== Linen benchmark \x{2014} baseline ===
 
 Operating System: macOS
 CPU Information: Apple M3 Max
@@ -46,6 +46,6 @@ Comparison:
 500 get_cell                             28.06 MB
 500 put_cell + save                     347.97 MB - 12.40x memory usage +319.91 MB
 1000 unique string interns + save      1803.93 MB - 64.29x memory usage +1775.87 MB
-Suite saved in external term format at /Users/jarius/Programming/elixir/ex_v_ex/ex_v_ex/bench/results/baseline.benchee
+Suite saved in external term format at /Users/jarius/Programming/elixir/linen/linen/bench/results/baseline.benchee
 
-Snapshot saved to /Users/jarius/Programming/elixir/ex_v_ex/ex_v_ex/bench/results/baseline.benchee
+Snapshot saved to /Users/jarius/Programming/elixir/linen/linen/bench/results/baseline.benchee
